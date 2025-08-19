@@ -1,5 +1,4 @@
 # Kata TDD: Simulador del Juego Dudo Chileno
-[![CI](https://github.com/GeoffreyHecht/tarea_dudo/actions/workflows/python-app.yml/badge.svg)](https://github.com/GeoffreyHecht/tarea_dudo/actions/workflows/python-app.yml)
 
 ## Contexto
 El Dudo es un juego tradicional chileno que se juega con dados en "cachos". Su tarea es implementar un simulador que maneje la lógica central del juego usando TDD. Como parece haber tantas variantes de reglas como jugadores, vamos a usar las reglas de la siguiente página: https://www.donpichuncho.cl/aprende-a-jugar-dudo-en-cacho
