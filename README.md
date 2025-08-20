@@ -73,8 +73,11 @@ python3 -m pytest --cov=src --cov-report=term-missing
 - **Generador de números aleatorios**: Para hacer pruebas deterministas
 - **Aislamiento de las pruebas**: Mocks para aislar las diferentes partes de la lógica de negocio (excluyendo las clases orientadas a orquestaciones que pueden no hacer mocking)
 
-### Estructura Sugerida
-Pueden adaptar la organización y añadir archivos, pero deben mantener un código organizado.
+###  Ejemplo de estructura
+Aquí hay un ejemplo de estructura de proyecto que podría obtener y que le puede ayudar. Evidentemente, con el TDD podría obtener una estructura emergente diferente (más archivos fuente o algunos ausentes), pero debe respetar la organización del código en varios archivos dentro de /src y /tests.
+En cualquier caso, hagan sus estructuras de a poquito a medida que avanzan con el TDD.
+
+
 ```
 src/
 ├── juego/
