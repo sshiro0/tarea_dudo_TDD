@@ -4,7 +4,6 @@ from src.dado import Dado
 class TestDado:
 
     def test_crear_dado(self):
-        Dado = Dado()
-        assert 1 <= Dado.get_valor() <= 6
+        dado = Dado()
+        assert 1 <= dado.get_valor() <= 6
 
-    
