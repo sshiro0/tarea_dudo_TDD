@@ -15,3 +15,5 @@ class Dado:
     def get_denominacion(self):
         return Denominacion(self.valor).name
 
+    def revolver(self):
+        self.valor = random.randint(1, 6)

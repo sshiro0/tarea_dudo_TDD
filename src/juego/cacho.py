@@ -13,3 +13,7 @@ class Cacho:
     def get_lista_dados(self):
         return self.dados
 
+    def revolver(self):
+        for dado in self.dados:
+            dado.revolver()
+
