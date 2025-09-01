@@ -64,4 +64,22 @@ class TestCacho:
         denominaciones_esperadas = ['AS', 'TONTO', 'TREN', 'CUADRA', 'QUINA']
         assert denominaciones == denominaciones_esperadas
 
+    def test_alterar_cantidad_dados(self, mocker):
+        mock_randint = MagicMock(side_effect=[1, 2, 3, 4, 5, 6, 1])
+        mocker.patch('juego.dado.random.randint', mock_randint)
 
+        cacho = Cacho()
+        assert len(cacho.get_lista_dados()) == 5
+
+        cacho.eliminar_dado()
+        cacho.eliminar_dado()
+        assert len(cacho.get_lista_dados()) == 3
+
+        cacho.agregar_dado()
+        assert len(cacho.get_lista_dados()) == 4
+
+        cacho.agregar_dado()
+        assert len(cacho.get_lista_dados()) == 5
+
+        cacho.agregar_dado()
+        assert len(cacho.get_lista_dados()) == 5
