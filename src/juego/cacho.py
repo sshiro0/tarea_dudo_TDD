@@ -30,3 +30,10 @@ class Cacho:
             denominacion = dado.get_denominacion()
             denominaciones.append(denominacion)
         return denominaciones
+
+    def agregar_dado(self):
+        if len(self.dados) < 5:
+            self.dados.append(Dado())
+
+    def eliminar_dado(self):
+        self.dados.pop()
