@@ -43,5 +43,25 @@ class TestCacho:
 
         assert final_values == final_mock
 
+    def test_mostrar_dados(self, mocker):
+        mock_valores = [1, 3, 5, 2, 4]
+        mock_randint = MagicMock(side_effect=mock_valores)
+        mocker.patch('juego.dado.random.randint', mock_randint)
+
+        cacho = Cacho()
+        valores_mostrados = cacho.get_valor_dados()
+
+        assert valores_mostrados == mock_valores
+
+    def test_mostrar_denominaciones(self, mocker):
+        mock_valores = [1, 2, 3, 4, 5]
+        mock_randint = MagicMock(side_effect=mock_valores)
+        mocker.patch('juego.dado.random.randint', mock_randint)
+
+        cacho = Cacho()
+        denominaciones = cacho.get_denominaciones()
+
+        denominaciones_esperadas = ['AS', 'TONTO', 'TREN', 'CUADRA', 'QUINA']
+        assert denominaciones == denominaciones_esperadas
 
 
