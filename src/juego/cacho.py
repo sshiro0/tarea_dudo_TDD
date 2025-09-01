@@ -17,3 +17,16 @@ class Cacho:
         for dado in self.dados:
             dado.revolver()
 
+    def get_valor_dados(self):
+        valores = []
+        for dado in self.dados:
+            valor = dado.get_valor()
+            valores.append(valor)
+        return valores
+
+    def get_denominaciones(self):
+        denominaciones = []
+        for dado in self.dados:
+            denominacion = dado.get_denominacion()
+            denominaciones.append(denominacion)
+        return denominaciones
