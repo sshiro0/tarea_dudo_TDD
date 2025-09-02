@@ -16,3 +16,14 @@ class TestGestorPartida:
 
         for jugador in gestor.jugadores:
             assert isinstance(jugador, Cacho)
+
+            assert len(jugador.get_lista_dados()) == 5
+
+    def test_seleccionar_jugador_inicial(self, mocker):
+        mocker.patch('random.randint', return_value=0)
+
+        gestor = GestorPartida(4)
+        jugador_inicial = gestor.definir_jugador_inicial()
+
+        assert jugador_inicial == gestor.jugadores[0]
+        assert gestor.jugador_actual == gestor.jugadores[0]
