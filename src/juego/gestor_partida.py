@@ -11,14 +11,18 @@ class GestorPartida:
     def __init__(self, cantidad):
         self.cantidad = cantidad
         self.jugadores = []
-        self.index_inicial = None
-        self.jugador_inicial = None
+        self.index_actual = None
+        self.jugador_actual = None
 
         for i in range(cantidad):
             self.jugadores.append(Cacho())
 
     def definir_jugador_inicial(self):
-        self.index_inicial = random.randint(0, self.cantidad - 1)
-        self.jugador_inicial = self.jugadores[self.index_inicial]
+        self.index_actual = random.randint(0, self.cantidad - 1)
+        self.jugador_actual = self.jugadores[self.index_actual]
+        return self.jugador_actual
 
-        return self.jugador_inicial
+    def siguiente_turno(self):
+        self.index_actual = (self.index_actual + 1) % self.cantidad
+        self.jugador_actual = self.jugadores[self.index_actual]
+        return self.jugador_actual
