@@ -34,10 +34,10 @@ class TestGestorPartida:
         gestor.definir_jugador_inicial()
 
         siguiente = gestor.siguiente_turno()
-        assert siguiente == gestor.jugadores[1]
+        assert siguiente is gestor.jugadores[1]
 
         siguiente = gestor.siguiente_turno()
-        assert siguiente == gestor.jugadores[2]
+        assert siguiente is gestor.jugadores[2]
 
         siguiente = gestor.siguiente_turno()
-        assert siguiente == gestor.jugadores[0]
+        assert siguiente is gestor.jugadores[0]
