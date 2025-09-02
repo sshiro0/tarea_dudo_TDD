@@ -67,3 +67,23 @@ class TestValidadorApuesta:
         assert self.validador.validar_apuesta((4, 1), (9, 3), self.cantidad_dados_jugador) is True
         assert self.validador.validar_apuesta((4, 1), (8, 3), self.cantidad_dados_jugador) is False
         assert self.validador.validar_apuesta((3, 1), (7, 4), self.cantidad_dados_jugador) is True
+
+    def test_ronda_especial_primera_apuesta(self):
+        """
+        Test para verificar que en una ronda especial la primera apuesta siempre
+        es válida, incluso si apuesta directamente a ases (pinta = 1).
+        """
+        assert self.validador.validar_apuesta(None, (2, 1), 5, True) is True
+        assert self.validador.validar_apuesta(None, (3, 1), 5, True) is True
+
+    def test_ronda_especial_cambio_pintas(self):
+        """
+        Test para verificar las reglas de cambio de pintas en una ronda especial:
+        - De ases a otra pinta: se debe cumplir la cantidad mínima requerida.
+        - De otra pinta a ases: se debe cumplir la conversión de cantidad mínima.
+        - Se rechaza si no se supera la apuesta anterior en cantidad o pinta.
+        """
+        assert self.validador.validar_apuesta((4, 1), (5, 3), 5, True) is True
+        assert self.validador.validar_apuesta((4, 1), (4, 3), 5, True) is False
+        assert self.validador.validar_apuesta((6, 3), (7, 1), 5, True) is True
+        assert self.validador.validar_apuesta((6, 3), (4, 1), 5, True) is False
