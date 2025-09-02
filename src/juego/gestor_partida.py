@@ -20,9 +20,22 @@ class GestorPartida:
     def definir_jugador_inicial(self):
         self.index_actual = random.randint(0, self.cantidad - 1)
         self.jugador_actual = self.jugadores[self.index_actual]
-        return self.jugador_actual
+        return self.index_actual
+
+    def get_jugador_actual_index(self):
+        if self.index_actual is not None:
+            return self.index_actual
+        return None
+
+    def get_jugador_actual(self):
+        if self.index_actual is not None:
+            return self.jugadores[self.index_actual]
+        return None
 
     def siguiente_turno(self):
         self.index_actual = (self.index_actual + 1) % self.cantidad
         self.jugador_actual = self.jugadores[self.index_actual]
-        return self.jugador_actual
+        return self.index_actual
+
+    def get_jugador_indice(self, index):
+        return self.jugadores[index]
