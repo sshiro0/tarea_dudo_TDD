@@ -26,4 +26,18 @@ class TestGestorPartida:
         jugador_inicial = gestor.definir_jugador_inicial()
 
         assert jugador_inicial == gestor.jugadores[0]
-        assert gestor.index_inicial == 0
+        assert gestor.index_actual == 0
+
+
+    def test_siguiente_turno(self):
+        gestor = GestorPartida(3)
+        gestor.definir_jugador_inicial()
+
+        siguiente = gestor.siguiente_turno()
+        assert siguiente == gestor.jugadores[1]
+
+        siguiente = gestor.siguiente_turno()
+        assert siguiente == gestor.jugadores[2]
+
+        siguiente = gestor.siguiente_turno()
+        assert siguiente == gestor.jugadores[0]
