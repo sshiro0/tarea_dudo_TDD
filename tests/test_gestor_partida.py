@@ -26,4 +26,4 @@ class TestGestorPartida:
         jugador_inicial = gestor.definir_jugador_inicial()
 
         assert jugador_inicial == gestor.jugadores[0]
-        assert gestor.jugador_actual == gestor.jugadores[0]
+        assert gestor.index_inicial == 0
