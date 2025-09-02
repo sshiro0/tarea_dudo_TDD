@@ -99,3 +99,18 @@ class TestGestorPartida:
         gestor.index_actual = None
         assert gestor.get_jugador_actual_index() is None
 
+    def test_obtener_jugadores_activos(self):
+        """
+        Test para verificar la obtención correcta de jugadores activos (con dados).
+        """
+        gestor = GestorPartida(3)
+
+        activos = gestor.get_jugadores_activos()
+        assert len(activos) == 3
+        assert activos == [0, 1, 2]
+
+        gestor.jugadores[1].dados = []
+        activos = gestor.get_jugadores_activos()
+        assert len(activos) == 2
+        assert activos == [0, 2]
+
