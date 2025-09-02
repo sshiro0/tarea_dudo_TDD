@@ -87,3 +87,12 @@ class TestValidadorApuesta:
         assert self.validador.validar_apuesta((4, 1), (4, 3), 5, True) is False
         assert self.validador.validar_apuesta((6, 3), (7, 1), 5, True) is True
         assert self.validador.validar_apuesta((6, 3), (4, 1), 5, True) is False
+
+    def test_primera_apuesta_ronda_normal_con_ases(self):
+        """
+        Test para verificar la regla de la primera apuesta en ronda normal:
+        - Si se apuesta a ases y el jugador tiene más de un dado, la apuesta es inválida.
+        - Si el jugador solo tiene un dado, la apuesta a ases es válida.
+        """
+        assert self.validador.validar_apuesta(None, (2, 1), 5, False) is False
+        assert self.validador.validar_apuesta(None, (1, 1), 1, False) is True
