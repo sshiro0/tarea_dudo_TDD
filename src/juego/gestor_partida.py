@@ -52,3 +52,10 @@ class GestorPartida:
                 indices_activos.append(indice_jugador)
 
         return indices_activos
+
+    def jugador_tiene_dados(self, jugador_idx):
+        jugador_actual = self.jugadores[jugador_idx]
+        lista_dados_jugador = jugador_actual.get_lista_dados()
+        cantidad_dados = len(lista_dados_jugador)
+        tiene_dados = cantidad_dados > 0
+        return tiene_dados
