@@ -114,3 +114,14 @@ class TestGestorPartida:
         assert len(activos) == 2
         assert activos == [0, 2]
 
+    def test_jugador_tiene_dados(self):
+        """
+        Test para verificar si un jugador tiene dados.
+        """
+        gestor = GestorPartida(3)
+
+        assert gestor.jugador_tiene_dados(0) is True
+        assert gestor.jugador_tiene_dados(1) is True
+
+        gestor.jugadores[1].dados = []
+        assert gestor.jugador_tiene_dados(1) is False
