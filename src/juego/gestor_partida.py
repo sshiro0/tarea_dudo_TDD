@@ -79,20 +79,27 @@ class GestorPartida:
         """
         Avanza al siguiente turno de manera circular y según el sentido,
         considerando sólo jugadores activos (con dados).
+        El jugador activo es aquel cuyo cacho tiene al menos 1 dado.
         """
-        activos = self.get_jugadores_activos()
-        if not activos:
-            return None
+        total_jugadores = len(self.jugadores)
+        if self.index_actual is None:
+            # Si no hay jugador actual, buscar el primero con dados
+            for idx in range(total_jugadores):
+                if self.jugador_tiene_dados(idx):
+                    self.index_actual = idx
+                    self.jugador_actual = self.jugadores[idx]
+                    return self.index_actual
+            return None  # Ningún jugador tiene dados
 
-        # Si index_actual no está entre los activos, selecciona el primero
-        if self.index_actual not in activos:
-            self.index_actual = activos[0]
-        else:
-            idx = activos.index(self.index_actual)
-            idx_siguiente = (idx + self.sentido) % len(activos)
-            self.index_actual = activos[idx_siguiente]
-        self.jugador_actual = self.jugadores[self.index_actual]
-        return self.index_actual
+        # Buscar el siguiente jugador con dados en sentido indicado
+        next_idx = self.index_actual
+        for _ in range(1, total_jugadores + 1):  # hacerlo circular
+            next_idx = (next_idx + self.sentido) % total_jugadores
+            if self.jugador_tiene_dados(next_idx):
+                self.index_actual = next_idx
+                self.jugador_actual = self.jugadores[next_idx]
+                return self.index_actual
+        return None  # Puede ocurrir si nadie tiene dados
 
     def get_jugador(self, index):
         """
@@ -102,21 +109,12 @@ class GestorPartida:
 
     def get_jugadores_activos(self):
         """
-        Obtiene los índices de todos los jugadores que aún tienen dados.
-
-        Un jugador se considera activo si tiene al menos un dado en su cacho.
+        Retorna una lista de índices de jugadores que tienen al menos un dado.
         """
-        indices_activos = []
-        total_jugadores = len(self.jugadores)
-
-        for indice_jugador in range(total_jugadores):
-            jugador_actual = self.jugadores[indice_jugador]
-            dados_del_jugador = jugador_actual.get_lista_dados()
-
-            if len(dados_del_jugador) > 0:
-                indices_activos.append(indice_jugador)
-
-        return indices_activos
+        return [
+            idx for idx, jugador in enumerate(self.jugadores)
+            if len(jugador.get_lista_dados()) > 0
+        ]
 
     def jugador_tiene_dados(self, jugador_idx):
         """
