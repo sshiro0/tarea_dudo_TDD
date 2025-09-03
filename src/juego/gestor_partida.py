@@ -126,43 +126,88 @@ class GestorPartida:
         tiene_dados = cantidad_dados > 0
         return tiene_dados
 
+
     def definir_sentido(self, sentido):
+        """
+        Define el sentido de la partida.
+        """
         if sentido in (1, -1):
             self.sentido = sentido
             return self.sentido
         return None
 
+
     def activar_estado_especial(self, tipo):
+        """
+        Activa un estado especial para la ronda actual.
+        """
         if tipo in (1, 2):
             self.estado_especial = tipo
 
+
     def desactivar_estado_especial(self):
+        """
+        Desactiva cualquier estado especial que esté activo en la ronda.
+        """
         self.estado_especial = None
 
+
     def es_ronda_especial(self):
+        """
+        Verifica si actualmente hay una ronda especial activa.
+        """
         return self.estado_especial is not None
 
+
     def get_tipo_ronda_especial(self):
+        """
+        Obtiene el tipo de ronda especial actualmente activa.
+        """
         return self.estado_especial
 
+
     def otorgar_dado_extra(self, idx_jugador):
+        """
+        Otorga un dado extra al jugador especificado.
+
+        Si el jugador tiene menos de 5 dados, se agrega inmediatamente.
+        Si ya tiene 5 dados, se almacena en buffer para futura recuperación.
+        """
         jugador = self.jugadores[idx_jugador]
         if len(jugador.get_lista_dados()) < 5:
             jugador.agregar_dado()
         else:
             self.buffer_dados_extra[idx_jugador] += 1
 
+
     def intentar_recuperar_dado_extra(self, idx_jugador):
+        """
+        Intenta recuperar un dado del buffer cuando el jugador pierde uno.
+
+        Solo recupera un dado si hay dados disponibles en el buffer y el jugador
+        tiene menos de 5 dados en juego.
+        """
         if self.buffer_dados_extra[idx_jugador] > 0:
             jugador = self.jugadores[idx_jugador]
             if len(jugador.get_lista_dados()) < 5:
                 jugador.agregar_dado()
                 self.buffer_dados_extra[idx_jugador] -= 1
 
+
     def get_buffer_dados_extra(self, idx_jugador):
+        """
+        Obtiene la cantidad de dados extra disponibles en buffer para un jugador.
+        """
         return self.buffer_dados_extra.get(idx_jugador, 0)
 
+
     def verificar_ronda_especial(self, idx_jugador):
+        """
+        Verifica si se debe activar una ronda especial basado en la cantidad de dados del jugador.
+
+        Activa una ronda especial cuando el jugador queda con solo 1 dado y no ha
+        activado previamente una ronda especial en esta situación.
+        """
         jugador = self.jugadores[idx_jugador]
         if len(jugador.get_lista_dados()) == 1 and not self.ronda_especial_activada[idx_jugador]:
             self.ronda_especial_activada[idx_jugador] = True
