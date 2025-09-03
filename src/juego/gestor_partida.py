@@ -77,12 +77,20 @@ class GestorPartida:
 
     def siguiente_turno(self):
         """
-        Avanza al siguiente turno de manera circular.
-
-        El turno pasa al siguiente jugador en la lista, volviendo al primero
-        después del último jugador (comportamiento circular).
+        Avanza al siguiente turno de manera circular y según el sentido,
+        considerando sólo jugadores activos (con dados).
         """
-        self.index_actual = (self.index_actual + 1) % self.cantidad_jugadores
+        activos = self.get_jugadores_activos()
+        if not activos:
+            return None
+
+        # Si index_actual no está entre los activos, selecciona el primero
+        if self.index_actual not in activos:
+            self.index_actual = activos[0]
+        else:
+            idx = activos.index(self.index_actual)
+            idx_siguiente = (idx + self.sentido) % len(activos)
+            self.index_actual = activos[idx_siguiente]
         self.jugador_actual = self.jugadores[self.index_actual]
         return self.index_actual
 
