@@ -44,10 +44,10 @@ class GestorPartida:
         index_actual = 0
         while ganador == -1:
             torneo = []
-            for jugador in range(5):
+            for jugador in range(self.cantidad_jugadores):
                 torneo.append(random.randint(1, 6))
 
-            for jugador in range(5):
+            for jugador in range(self.cantidad_jugadores):
                 if torneo[jugador] > ganador:
                     ganador = torneo[jugador]
                     index_actual = jugador
