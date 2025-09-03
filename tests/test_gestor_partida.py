@@ -126,3 +126,122 @@ class TestGestorPartida:
 
         gestor.jugadores[1].dados = []
         assert gestor.jugador_tiene_dados(1) is False
+
+
+    def test_definir_sentido(self):
+        """
+        Test para verificar que el sentido de la partida se define correctamente.
+        """
+        gestor = GestorPartida(3)
+        assert gestor.sentido == 1
+        assert gestor.definir_sentido(-1) == -1
+        assert gestor.sentido == -1
+        assert gestor.definir_sentido(1) == 1
+        assert gestor.sentido == 1
+        assert gestor.definir_sentido(0) is None  # Valor inválido, no cambia
+
+    def test_activar_estado_especial(self):
+        """
+        Test para verificar que se activa correctamente el estado especial.
+        """
+        gestor = GestorPartida(3)
+        assert gestor.estado_especial is None
+        gestor.activar_estado_especial(1)
+        assert gestor.estado_especial == 1
+        gestor.activar_estado_especial(2)
+        assert gestor.estado_especial == 2
+        gestor.activar_estado_especial(3)  # Valor inválido, no cambia
+        assert gestor.estado_especial == 2
+
+    def test_desactivar_estado_especial(self):
+        """
+        Test para verificar que se desactiva correctamente el estado especial.
+        """
+        gestor = GestorPartida(3)
+        gestor.activar_estado_especial(1)
+        assert gestor.estado_especial == 1
+        gestor.desactivar_estado_especial()
+        assert gestor.estado_especial is None
+
+    def test_es_ronda_especial(self):
+        """
+        Test para verificar la función que indica si la ronda es especial.
+        """
+        gestor = GestorPartida(3)
+        assert gestor.es_ronda_especial() is False
+        gestor.activar_estado_especial(1)
+        assert gestor.es_ronda_especial() is True
+        gestor.desactivar_estado_especial()
+        assert gestor.es_ronda_especial() is False
+
+    def test_get_tipo_ronda_especial(self):
+        """
+        Test para verificar que se obtiene correctamente el tipo de ronda especial.
+        """
+        gestor = GestorPartida(3)
+        assert gestor.get_tipo_ronda_especial() is None
+        gestor.activar_estado_especial(2)
+        assert gestor.get_tipo_ronda_especial() == 2
+        gestor.desactivar_estado_especial()
+        assert gestor.get_tipo_ronda_especial() is None
+
+    def test_otorgar_dado_extra(self):
+        """
+        Test para verificar que se otorga correctamente el dado extra.
+        """
+        gestor = GestorPartida(2)
+        idx = 0
+        # El jugador tiene menos de 5 dados, debe agregar uno
+        gestor.jugadores[idx].dados.pop()  # Deja con 4 dados
+        gestor.otorgar_dado_extra(idx)
+        assert len(gestor.jugadores[idx].dados) == 5
+        assert gestor.buffer_dados_extra[idx] == 0
+
+        # El jugador ya tiene 5 dados, debe aumentar el buffer
+        gestor.otorgar_dado_extra(idx)
+        assert len(gestor.jugadores[idx].dados) == 5
+        assert gestor.buffer_dados_extra[idx] == 1
+
+    def test_intentar_recuperar_dado_extra(self):
+        """
+        Test para verificar que el jugador recupera dados del buffer cuando pierde uno.
+        """
+        gestor = GestorPartida(2)
+        idx = 0
+
+        # Simula buffer extra
+        gestor.buffer_dados_extra[idx] = 2
+        # Quita un dado al jugador
+        gestor.jugadores[idx].dados.pop()
+        assert len(gestor.jugadores[idx].dados) == 4
+        gestor.intentar_recuperar_dado_extra(idx)
+        assert len(gestor.jugadores[idx].dados) == 5
+        assert gestor.buffer_dados_extra[idx] == 1
+
+        # Quita otro dado y recupera el segundo
+        gestor.jugadores[idx].dados.pop()
+        gestor.intentar_recuperar_dado_extra(idx)
+        assert len(gestor.jugadores[idx].dados) == 5
+        assert gestor.buffer_dados_extra[idx] == 0
+
+    def test_get_buffer_dados_extra(self):
+        """
+        Test para verificar el acceso al buffer de dados extra.
+        """
+        gestor = GestorPartida(2)
+        assert gestor.get_buffer_dados_extra(0) == 0
+        gestor.buffer_dados_extra[0] = 3
+        assert gestor.get_buffer_dados_extra(0) == 3
+
+    def test_verificar_ronda_especial(self):
+        """
+        Test para verificar la detección y activación de ronda especial al quedar con un dado.
+        """
+        gestor = GestorPartida(2)
+        idx = 0
+
+        # Quita hasta que tenga 1 dado
+        gestor.jugadores[idx].dados = gestor.jugadores[idx].dados[:1]
+        assert gestor.verificar_ronda_especial(idx) is True
+        # Si lo vuelve a llamar, ya no activa de nuevo
+        assert gestor.verificar_ronda_especial(idx) is False
