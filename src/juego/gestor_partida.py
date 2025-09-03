@@ -16,16 +16,24 @@ class GestorPartida:
     actual de la partida incluyendo qué jugador tiene el turno actual.
     """
 
-    def __init__(self, cantidad):
+    def __init__(self, cantidad_jugadores):
         """
         Inicializa una nueva partida con la cantidad especificada de jugadores.
         """
-        self.cantidad = cantidad
+        self.cantidad_jugadores = cantidad_jugadores
         self.jugadores = []
         self.index_actual = None
         self.jugador_actual = None
 
-        for i in range(cantidad):
+        self.sentido = 1
+
+        self.estado_especial = None
+
+        self.buffer_dados_extra = {i: 0 for i in range(cantidad_jugadores)}
+
+        self.ronda_especial_activada = {i: False for i in range(cantidad_jugadores)}
+
+        for i in range(cantidad_jugadores):
             self.jugadores.append(Cacho())
 
     def definir_jugador_inicial(self):
@@ -74,7 +82,7 @@ class GestorPartida:
         El turno pasa al siguiente jugador en la lista, volviendo al primero
         después del último jugador (comportamiento circular).
         """
-        self.index_actual = (self.index_actual + 1) % self.cantidad
+        self.index_actual = (self.index_actual + 1) % self.cantidad_jugadores
         self.jugador_actual = self.jugadores[self.index_actual]
         return self.index_actual
 
@@ -111,3 +119,46 @@ class GestorPartida:
         cantidad_dados = len(lista_dados_jugador)
         tiene_dados = cantidad_dados > 0
         return tiene_dados
+
+    def definir_sentido(self, sentido):
+        if sentido in (1, -1):
+            self.sentido = sentido
+            return self.sentido
+        return None
+
+    def activar_estado_especial(self, tipo):
+        if tipo in (1, 2):
+            self.estado_especial = tipo
+
+    def desactivar_estado_especial(self):
+        self.estado_especial = None
+
+    def es_ronda_especial(self):
+        return self.estado_especial is not None
+
+    def get_tipo_ronda_especial(self):
+        return self.estado_especial
+
+    def otorgar_dado_extra(self, idx_jugador):
+        jugador = self.jugadores[idx_jugador]
+        if len(jugador.get_lista_dados()) < 5:
+            jugador.agregar_dado()
+        else:
+            self.buffer_dados_extra[idx_jugador] += 1
+
+    def intentar_recuperar_dado_extra(self, idx_jugador):
+        if self.buffer_dados_extra[idx_jugador] > 0:
+            jugador = self.jugadores[idx_jugador]
+            if len(jugador.get_lista_dados()) < 5:
+                jugador.agregar_dado()
+                self.buffer_dados_extra[idx_jugador] -= 1
+
+    def get_buffer_dados_extra(self, idx_jugador):
+        return self.buffer_dados_extra.get(idx_jugador, 0)
+
+    def verificar_ronda_especial(self, idx_jugador):
+        jugador = self.jugadores[idx_jugador]
+        if len(jugador.get_lista_dados()) == 1 and not self.ronda_especial_activada[idx_jugador]:
+            self.ronda_especial_activada[idx_jugador] = True
+            return True
+        return False
