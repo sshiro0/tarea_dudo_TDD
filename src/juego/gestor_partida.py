@@ -30,9 +30,24 @@ class GestorPartida:
 
     def definir_jugador_inicial(self):
         """
-        Selecciona aleatoriamente el jugador que iniciará la partida.
+        Se establece jugador incial mediante un torneo que dura hasta que un jugador obtiene el dado mayor.
         """
-        self.index_actual = random.randint(0, self.cantidad - 1)
+        ganador = -1
+        index_actual = 0
+        while ganador == -1:
+            torneo = []
+            for jugador in range(5):
+                torneo.append(random.randint(1, 6))
+
+            for jugador in range(5):
+                if torneo[jugador] > ganador:
+                    ganador = torneo[jugador]
+                    index_actual = jugador
+                elif torneo[jugador] == ganador:
+                    ganador = -1
+                    index_actual = 0
+                    break
+        self.index_actual = index_actual
         self.jugador_actual = self.jugadores[self.index_actual]
         return self.index_actual
 
@@ -63,7 +78,7 @@ class GestorPartida:
         self.jugador_actual = self.jugadores[self.index_actual]
         return self.index_actual
 
-    def get_jugador_indice(self, index):
+    def get_jugador(self, index):
         """
         Obtiene el objeto Cacho de un jugador específico por su índice.
         """

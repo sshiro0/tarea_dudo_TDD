@@ -30,20 +30,21 @@ class TestGestorPartida:
 
     def test_seleccionar_jugador_inicial(self, mocker):
         """
-        Test para verificar la selección aleatoria del jugador inicial.
+        Test para verificar la selección del jugador inicial usando torneo de dados.
         """
-        # Mockear random.randint para que siempre retorne 0 (primer jugador)
-        mocker.patch('random.randint', return_value=0)
+        gestor = GestorPartida(5)  # Crea los jugadores ANTES del mock
 
-        # Crear partida con 4 jugadores
-        gestor = GestorPartida(4)
-        # Seleccionar jugador inicial
-        index_inicial = gestor.definir_jugador_inicial()
+        # Simulamos dos rondas de torneo:
+        # Primer torneo: [2, 6, 3, 6, 1] (empate en 6 entre 1 y 3)
+        # Segundo torneo: [1, 5, 3, 2, 2] (jugador 1 gana con 5)
+        torneo_numeros = [2, 6, 3, 6, 1, 1, 5, 3, 2, 2]
 
-        # Verificar que el jugador inicial es el primero de la lista
-        assert gestor.get_jugador_actual() == gestor.jugadores[0]
-        # Verificar que el índice actual se estableció correctamente
-        assert index_inicial == 0
+        with mocker.patch('random.randint', side_effect=torneo_numeros):
+            index_inicial = gestor.definir_jugador_inicial()
+
+        assert gestor.get_jugador_actual() == gestor.jugadores[1]
+        assert index_inicial == 1
+
 
     def test_siguiente_turno(self):
         """
@@ -78,8 +79,8 @@ class TestGestorPartida:
         """
         gestor = GestorPartida(3)
 
-        assert gestor.get_jugador_indice(0) is gestor.jugadores[0]
-        assert gestor.get_jugador_indice(2) is gestor.jugadores[2]
+        assert gestor.get_jugador(0) is gestor.jugadores[0]
+        assert gestor.get_jugador(2) is gestor.jugadores[2]
 
     def test_get_jugador_actual_index_valido(self):
         """
